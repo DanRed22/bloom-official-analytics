@@ -41,7 +41,7 @@
 .content-container {
     border-radius: 20px;
     min-width: 1000px;
-    max-width: 80%;
+    max-width: 75%;
     width: auto;
     box-sizing: border-box;
     font-size: 16px;
@@ -51,7 +51,6 @@
 
 .content-main {
     border-radius: 20px;
-    min-width: 1000px;
     width: auto;
     box-sizing: border-box;
     font-size: 16px;
@@ -60,14 +59,13 @@
     max-height: 60vh;
     overflow-y: auto;
     max-width: 90vw;
-    margin-top: -4vh;
     display: block;
 }
 
 .content-table {
     border-collapse: collapse;
     font-size: 18px;
-    width: 100%;
+    width: 80%;
     table-layout: fixed;
     font-weight: bold;
     max-height: 70vh;   
@@ -131,19 +129,18 @@ div {
                 <div class="content-container">
                     <div class="head-title">
                         <h1><b>Reports and Summary</b></h1>
-                        
+                        <h3 style="text-align: center; color:white">Sales Table</h3>
                     </div>
+                    <b-card>
                     <div class="content-main">
-
                         <table id="datatable" class="content-table" style="padding: 25px;">
                             <thead>
                                 <tr>
-                                    <th>Campaigns</th>
-                                    <th>Sales per Campaign</th>
-                                    <th>Sources</th>
-                                    <th>Expiry Date</th>
-                                    <th>Created At</th>
-                                    <th>Updated At</th>
+                                    <th>Campaigns ID</th>
+                                    <th>Type</th>
+                                    <th>Price</th>
+                                    <th>Count</th>
+                                    <th>Total Sales</th>
                                 </tr>
                             </thead>
                          
@@ -158,20 +155,21 @@ div {
                                     </tr>
                                     <tr class="table-row">
                                     </tr>
-                                    <tr class="table-row">
-                                    </tr>
+
                                 </tbody>
 
-                        </table>
                         
+                        </table>
                     </div>
+                </b-card>
+                    
                 </div>
-                <div style="margin-top: 2vh;">
-                <b-row>
-                        <b-col cols="2"><b-button variant="warning" @click="exportToPdf">Export to PDF</b-button></b-col>
-                        <b-col cols="2"><b-button variant="warning" @click="exportToCsv">Export to CSV</b-button></b-col>
-                    </b-row>
-                </div>
+                        <div style="margin-top: 1.5vh;">
+                        <b-row>
+                                <b-col cols="2"><b-button  variant="warning" @click="exportToPdf" >Export to PDF</b-button></b-col>
+                                <b-col cols="1"><b-button  variant="warning" @click="exportToCsv" >Export to CSV</b-button></b-col>
+                        </b-row>
+                        </div>
             </b-col>
         </b-row>
 
@@ -186,46 +184,41 @@ import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import axios from "axios";
 import $ from "jquery";
-import jsPDF from "jspdf";
-import * as Vue from 'vue';
-import "jspdf-autotable";
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import BootstrapVue from 'bootstrap-vue';
+
 
 export default {
     components: { AnalyticsSideBar, navBar },
     name: "Analytics Graphs",
-    data:()=>{
-        return{
-
-        }
-    },
     mounted() {
         console.log("Analytics Graphs Shown in the Screen");
         axios.get('/analytics/fetch_campaign_list')
             .then(function (response) {
-                console.log(response);
                 $('#datatable').DataTable({
                     data: response.data,
-                    lengthMenu: [5, 10, 20, 50],
+                    lengthMenu: [5, 10],
                     columns: [
-                        { title: 'Campaign ID', data: 'id' },
-                        { title: 'Sales per Campaign', data: 'amount' },
-                        { title: 'Source Country', data: 'bill_country' },
-                        { title: 'Expiry Date', data: 'exp_date' },
-                        { title: 'Created Date', data: 'created_at' },
-                        { title: 'Updated Date', data: 'updated_at' },
+                        { title: 'Campaigns ID', data: 'id' },
+                        { title: 'Type', data: 'type' },
+                        { title: 'Price', data: 'price' },
+                        { title: 'Count', data: 'count' },
+                        { title: 'Total Sales', data: 'amount' },
                     ]
                 });
             });
 
     },
-    methods: {
-  exportToPdf() {
+    methods:{
+    exportToPdf() {
     const doc = new jsPDF();
-    let date = String(Date());
     doc.autoTable({ html: "#datatable" });
-    doc.save("Analytics-Report+"+date+".pdf");
+    let date = String(Date());
+    doc.save("Analytics Sales Report - "+date+".pdf");
   },
   exportToCsv() {
+    let date = String(Date());
     const rows = Array.from(document.querySelectorAll("#datatable tbody tr"));
     const csvContent = rows
       .map(row => Array.from(row.querySelectorAll("td")).map(td => td.innerText).join(","))
@@ -235,15 +228,14 @@ export default {
     if (link.download !== undefined) {
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      let date = String(Date());
-      link.setAttribute("download", "Analytics-Report-"+date+".csv");
+      link.setAttribute("download", "Analytics Sales Report - "+date+".csv");
       link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
   }
-},
+}
 };
 
 
