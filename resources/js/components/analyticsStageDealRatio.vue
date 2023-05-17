@@ -41,7 +41,7 @@
   import axios from "axios"
   import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PieController, ArcElement } from 'chart.js'
   ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PieController, ArcElement )
-  
+  import * as Vue from 'vue';
    
   
   export default {
