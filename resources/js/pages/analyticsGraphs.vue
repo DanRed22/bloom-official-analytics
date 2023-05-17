@@ -40,7 +40,7 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import axios from "axios";
 import $ from "jquery";
 import AnalyticsStageDealRatio from '../components/analyticsStageDealRatio.vue';
-
+import * as Vue from 'vue';
 
 export default {
     name: "Analytics Graphs",

@@ -41,7 +41,7 @@ import { Pie } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PieController, ArcElement } from 'chart.js'
 import { BIconUmbrella } from 'bootstrap-vue'
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PieController, ArcElement)
-
+import * as Vue from 'vue';
  
 
 export default {

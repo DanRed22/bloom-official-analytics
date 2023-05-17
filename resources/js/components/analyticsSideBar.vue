@@ -10,7 +10,7 @@
 </b-col>
 </template>
 <script >
-
+import * as Vue from 'vue';
 export default {
     name: "AnalyticsSideBar",
     mounted() {
